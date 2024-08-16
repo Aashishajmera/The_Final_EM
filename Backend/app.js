@@ -3,6 +3,7 @@ import express from "express";
 import dotenv from 'dotenv';
 import bodyParser from "body-parser";
 import { userRouter } from "./router/User.Router.js";
+import { eventRouter } from "./router/Event.Router.js";
 
 
 // for using dotenv file
@@ -20,6 +21,9 @@ mongoose.connect(process.env.DATABASE_URL).then(() => {
 
     // FOR USER TABLE AND USER SIGNUP AND SIGNIN
     app.use(process.env.USER_API, userRouter);
+
+    // CRUD EVENT TABLE PERFORM CRUD
+    app.use(process.env.EVENT_API, eventRouter);
 
     app.listen(process.env.PORT_NUMBER, () => {
         console.log('server created...');
