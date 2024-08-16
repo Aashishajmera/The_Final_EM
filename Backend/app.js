@@ -18,6 +18,7 @@ mongoose.connect(process.env.DATABASE_URL).then(() => {
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({ extended: true }))
 
+    // FOR USER TABLE AND USER SIGNUP AND SIGNIN
     app.use(process.env.USER_API, userRouter);
 
     app.listen(process.env.PORT_NUMBER, () => {

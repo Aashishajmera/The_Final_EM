@@ -22,7 +22,7 @@ const userSchema = new mongoose.Schema({
 
 })
 
-// Create use model 
+// Create user model 
 
 export const UserModel = mongoose.model("user", userSchema);
 
