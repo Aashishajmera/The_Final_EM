@@ -38,21 +38,18 @@ export const RegistrationForEvent = async (req, res, next) => {
             to: email,
             subject: `Registration Successful for ${title}`,
             text: `
-                Dear ${username},
+Dear ${username},
+We are delighted to inform you that your registration for the event "${title}" has been successfully completed.
 
-                We are delighted to inform you that your registration for the event "${title}" has been successfully completed.
+  **Event Details:**
+ - **Title:** ${title}
+ - **Date:** ${new Date(date).toDateString()}
+ - **Time:** ${time}
+ - **Location:** ${location}
 
-                **Event Details:**
-                - **Title:** ${title}
-                - **Date:** ${new Date(date).toDateString()}
-                - **Time:** ${time}
-                - **Location:** ${location}
-
-                Thank you for registering. We look forward to seeing you at the event.
-
-                Best regards,
-                [Your Organization/Company Name]
-            `,
+Thank you for registering. We look forward to seeing you at the event
+Best regards,
+Event Managment Team`,
         };
 
         // Send email
