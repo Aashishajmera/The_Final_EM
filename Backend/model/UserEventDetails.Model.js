@@ -33,7 +33,7 @@ const userEventSchema = new mongoose.Schema({
     },
     eventId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Event', // Reference to the Event model
+        ref: 'events', // Reference to the Event model
         required: true,
     },
 });

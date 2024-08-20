@@ -32,10 +32,10 @@ const eventSchema = new mongoose.Schema({
     },
     userId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User', // Reference to the User model
+        ref: 'users', // Reference to the User model
         required: true,
     },
 });
 
 // Create the Event model
-export const EventModel = mongoose.model('event', eventSchema);
+export const EventModel = mongoose.model('events', eventSchema);
