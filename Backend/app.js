@@ -29,6 +29,9 @@ mongoose.connect(process.env.DATABASE_URL).then(() => {
     // USER REGISTER FOR EVENT
     app.use(process.env.USER_REGISTRAION_API, userEventDetailsRouter);
 
+    //  FOR SEND THE MAIL USING WEBSOCKET
+    
+
     app.listen(process.env.PORT_NUMBER, () => {
         console.log('server created...');
     })
