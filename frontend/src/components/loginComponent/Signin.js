@@ -63,6 +63,11 @@ export default function SignIn() {
             try {
                 const response = await axios.post('http://localhost:3000/user/usersignin', formData);
                 
+                // STORE THE DATA INTO SESSION STORAGE
+                const user = response.data.user;
+                sessionStorage.setItem('user', JSON.stringify(user));
+
+
                 // Notify the user of successful sign-in
                 Swal.fire({
                     icon: 'success',
