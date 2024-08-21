@@ -1,0 +1,15 @@
+.navbar{
+    background-color: crimson;
+}
+
+/* for remove the border */
+.humber-icon{
+    color: white !important;
+
+}
+
+.humber-btn{
+    border: none;
+    border-radius: 10%;
+    color: crimson;
+}

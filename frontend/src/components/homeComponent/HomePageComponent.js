@@ -1,7 +1,11 @@
+import FooterComponent from "../footerComponent/FooterComponent";
+import HeaderComponent from "../headerComponent/HeaderComponent";
+
 export default function HomePage(){
     return(
         <>
-            <h3>I am home page....</h3>
+            <HeaderComponent/>
+            <FooterComponent/>
         </>
     )
 }
