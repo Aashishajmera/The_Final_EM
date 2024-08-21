@@ -3,16 +3,27 @@ import { UserModel } from "../model/User.Model.js";
 
 export const userSignUp = async (req, res) => {
     try {
+        // Validate request input
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             return res.status(400).json({ error: errors.array() });
         }
 
+        // Destructure email from request body
+        const { email } = req.body;
+
+        // Check if user with the given email already exists
+        const existingUser = await UserModel.findOne({ email });
+        if (existingUser) {
+            return res.status(400).json({ msg: "User with this email already exists." });
+        }
+
+        // Create new user if email is unique
         const user = await UserModel.create(req.body);
         return res.status(201).json({ msg: "User sign-up successful...", user });
     } catch (err) {
         console.error('Error during user sign-up:', err);
-        return res.status(500).json({ msg: "Internal server error..." });
+        return res.status(500).json({ msg: "Internal server error." });
     }
 };
 

@@ -1,17 +1,19 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { Link, useNavigate } from "react-router-dom";
+import Swal from 'sweetalert2'; // Import SweetAlert2
+import axios from 'axios'; // Import axios
 import "./Signup.css";
 
 export default function SignUp() {
     // State for form fields and errors
     const [formData, setFormData] = useState({
-        username: "",
+        userName: "",
         email: "",
         password: ""
     });
     const [errors, setErrors] = useState({});
+
+    const navigate = useNavigate();
 
     // Handle input changes
     const handleChange = (e) => {
@@ -28,15 +30,23 @@ export default function SignUp() {
         }));
     };
 
-    // Validate individual field
     const validateField = (name, value) => {
         switch (name) {
-            case 'username':
+            case 'userName':
                 return value.trim() ? "" : "Username is required";
             case 'email':
-                return value.trim()
-                    ? /\S+@\S+\.\S+/.test(value) ? "" : "Email is invalid"
-                    : "Email is required";
+                // General email validation pattern
+                const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                // Specific domain validation pattern for Gmail
+                const gmailPattern = /^[^\s@]+@gmail\.com$/;
+                if (!value.trim()) {
+                    return "Email is required";
+                } else if (!emailPattern.test(value)) {
+                    return "Email is invalid";
+                } else if (!gmailPattern.test(value)) {
+                    return "Only Gmail addresses are allowed";
+                }
+                return ""; // Valid email
             case 'password':
                 return value.trim()
                     ? value.length >= 6 ? "" : "Password must be at least 6 characters"
@@ -45,12 +55,13 @@ export default function SignUp() {
                 return "";
         }
     };
+    
 
     // Handle form submission
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         const validationErrors = {
-            username: validateField('username', formData.username),
+            userName: validateField('userName', formData.userName),
             email: validateField('email', formData.email),
             password: validateField('password', formData.password)
         };
@@ -59,10 +70,39 @@ export default function SignUp() {
 
         if (Object.values(validationErrors).every(error => !error)) {
             // Form is valid, handle form submission here (e.g., API call)
-            console.log("Form submitted:", formData);
-            toast.success("Form submitted successfully!");
+            try {
+                const response = await axios.post('http://localhost:3000/user/usersignup', formData);
+                setFormData({
+                    userName: "",
+                    email: "",
+                    password: ""
+                }); // Clear the form
+                
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success!',
+                    text: response.data.msg || "Sign-Up successful!",
+                    confirmButtonText: 'OK'
+                }).then(() => {
+                    // Navigate to the sign-in page after success
+                    navigate('/signIn');
+                });
+            } catch (error) {
+                console.error("Error during sign-up:", error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: error.response?.data?.msg || "Sign-Up failed. Please try again.",
+                    confirmButtonText: 'OK'
+                });
+            }
         } else {
-            toast.error("Please fill the form correctly.");
+            Swal.fire({
+                icon: 'warning',
+                title: 'Warning',
+                text: "Please fill the form correctly.",
+                confirmButtonText: 'OK'
+            });
         }
     };
 
@@ -79,13 +119,13 @@ export default function SignUp() {
                                 type="text"
                                 className="form-control"
                                 id="floatingInputName"
-                                name="username"
-                                placeholder="username"
-                                value={formData.username}
+                                name="userName"
+                                placeholder="userName"
+                                value={formData.userName}
                                 onChange={handleChange}
                             />
                             <label htmlFor="floatingInputName">Username</label>
-                            {errors.username && <div className="text-danger">{errors.username}</div>}
+                            {errors.userName && <div className="text-danger">{errors.userName}</div>}
                         </div>
                         <div className="form-floating mb-3">
                             <input
@@ -115,12 +155,11 @@ export default function SignUp() {
                         </div>
                         <div className="mt-3">
                             <button type="submit" className="btn btn-outline-success me-2">SignUp</button>
-                            <Link to="/singIn">Already have an account?</Link>
+                            <Link to="/signIn">Already have an account?</Link>
                         </div>
                     </form>
                 </div>
             </main>
-            <ToastContainer />
         </>
     );
 }

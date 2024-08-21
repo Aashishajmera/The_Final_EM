@@ -5,6 +5,8 @@ import bodyParser from "body-parser";
 import { userRouter } from "./router/User.Router.js";
 import { eventRouter } from "./router/Event.Router.js";
 import { userEventDetailsRouter } from "./router/UserEventDetails.Router.js";
+import cors from 'cors';
+
 
 
 // for using dotenv file
@@ -19,6 +21,7 @@ mongoose.connect(process.env.DATABASE_URL).then(() => {
 
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({ extended: true }))
+    app.use(cors());
 
     // FOR USER TABLE AND USER SIGNUP AND SIGNIN
     app.use(process.env.USER_API, userRouter);

@@ -1,15 +1,20 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import { toast, ToastContainer } from 'react-toastify';
+import { Link, useNavigate } from "react-router-dom";
+import {  ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import axios from 'axios'; // Import axios
 import "./Signup.css";
-
+import Swal from 'sweetalert2'
 export default function SignIn() {
     // State for form fields and errors
     const [formData, setFormData] = useState({
         email: "",
         password: ""
     });
+
+    // Hook for navigation
+    const navigate = useNavigate();
+
     const [errors, setErrors] = useState({});
 
     // Handle input changes
@@ -44,7 +49,7 @@ export default function SignIn() {
     };
 
     // Handle form submission
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         const validationErrors = {
             email: validateField('email', formData.email),
@@ -55,13 +60,37 @@ export default function SignIn() {
 
         if (Object.values(validationErrors).every(error => !error)) {
             // Form is valid, handle form submission here (e.g., API call)
-            console.log("Form submitted:", formData);
-            toast.success("SignIn successful!");
+            try {
+                const response = await axios.post('http://localhost:3000/user/usersignin', formData);
+                
+                // Notify the user of successful sign-in
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success!',
+                    text: response.data.msg || "Sign-In successful!",
+                    confirmButtonText: 'OK'
+                }).then(() => {
+                    // Navigate to the home page after success
+                    navigate('/homePage');
+                });
+            } catch (error) {
+                console.error("Error during sign-in:", error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: error.response?.data?.msg || "Sign-In failed. Please try again.",
+                    confirmButtonText: 'OK'
+                });
+            }
         } else {
-            toast.error("Please fill the form correctly.");
+            Swal.fire({
+                icon: 'warning',
+                title: 'Warning',
+                text: "Please fill the form correctly.",
+                confirmButtonText: 'OK'
+            });
         }
     };
-
     return (
         <>
             <main className="main-container d-flex align-items-center justify-content-center">
