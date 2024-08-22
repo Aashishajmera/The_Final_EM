@@ -45,9 +45,10 @@ export default function AllEventList() {
 
     return (
         <>
-            <h2 className='mt-4 mb-2'>Event List.....</h2>
+            <h2 className='m-3'>Event List.....</h2>
 
-            <table className="table">
+          <div className='table-responsive'>
+          <table className="table table-striped table-bordered">
                 <thead>
                     <tr>
                         <th scope="col">S.no</th>
@@ -75,6 +76,7 @@ export default function AllEventList() {
                     ))}
                 </tbody>
             </table>
+          </div>
         </>
     );
 }

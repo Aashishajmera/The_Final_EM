@@ -18,34 +18,40 @@ export default function SignUp() {
     // Handle input changes
     const handleChange = (e) => {
         const { name, value } = e.target;
+        // Convert email to lowercase if the field being changed is email
+        const normalizedValue = name === 'email' ? value.toLowerCase() : value;
+
         setFormData((prevData) => ({
             ...prevData,
-            [name]: value
+            [name]: normalizedValue
         }));
 
         // Clear errors when user types
         setErrors((prevErrors) => ({
             ...prevErrors,
-            [name]: validateField(name, value)
+            [name]: validateField(name, normalizedValue)
         }));
     };
 
     const validateField = (name, value) => {
         switch (name) {
             case 'userName':
-                return value.trim() ? "" : "Username is required";
+                // Check if username contains only alphabetic characters
+                const alphabeticPattern = /^[A-Za-z]+$/;
+                if (!value.trim()) {
+                    return "Username is required";
+                } else if (!alphabeticPattern.test(value)) {
+                    return "Username must be alphabetic";
+                }
+                return ""; // Valid username
             case 'email':
                 // General email validation pattern
-                const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                // Specific domain validation pattern for Gmail
-                const gmailPattern = /^[^\s@]+@gmail\.com$/;
+                const emailPattern = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/;
                 if (!value.trim()) {
                     return "Email is required";
                 } else if (!emailPattern.test(value)) {
                     return "Email is invalid";
-                } else if (!gmailPattern.test(value)) {
-                    return "Only Gmail addresses are allowed";
-                }
+                } 
                 return ""; // Valid email
             case 'password':
                 return value.trim()
@@ -55,7 +61,6 @@ export default function SignUp() {
                 return "";
         }
     };
-    
 
     // Handle form submission
     const handleSubmit = async (e) => {

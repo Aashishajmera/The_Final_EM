@@ -1,6 +1,6 @@
 import AllEventList from "../EventListComponent/AllEventList";
-import FooterComponent from "../footerComponent/FooterComponent";
-import HeaderComponent from "../headerComponent/HeaderComponent";
+import FooterComponent from "../FooterComponent/FooterComponent";
+import HeaderComponent from "../HeaderComponent/HeaderComponent";
 
 export default function HomePage(){
     return(

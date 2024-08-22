@@ -21,7 +21,6 @@ const transporter = nodemailer.createTransport({
 export const addEvent = async (req, res, next) => {
   try {
     const errors = validationResult(req);
-
     if (!errors.isEmpty()) {
       return res.status(400).json({ error: errors.array() });
     }
@@ -31,7 +30,7 @@ export const addEvent = async (req, res, next) => {
       .status(201)
       .json({ msg: "Event successfully created...", event });
   } catch (error) {
-    console.error("Error during adding event:", err);
+    console.error("Error during adding event:", error);
     return res.status(500).json({ msg: "Internal server error..." });
   }
 };
@@ -53,7 +52,7 @@ export const readOurEvent = async (req, res, next) => {
 
     if (allEvents.length === 0) {
       return res
-        .status(404)
+        .status(204)
         .json({ msg: "No events found for the given user ID", allEvents });
     }
 

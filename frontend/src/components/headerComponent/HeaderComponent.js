@@ -44,14 +44,17 @@ export default function HeaderComponent() {
                     </button>
                     <div className="collapse navbar-collapse" id="navbarNav">
                         <ul className="navbar-nav d-flex justify-content-end w-100">
+                        <li className="nav-item">
+                                <Link className="nav-link text-white" to="/homePage">Home</Link>
+                            </li>
                             <li className="nav-item">
-                                <Link className="nav-link text-white" to="/create-event">CreateEvent</Link>
+                                <Link className="nav-link text-white" to="/newEvent">CreateEvent</Link>
                             </li>
                             <li className="nav-item">
                                 <Link className="nav-link text-white" to="/ourEvent">OurEvent</Link>
                             </li>
                             <li className="nav-item">
-                                <a className="nav-link text-white" href="/" onClick={handleLogout}>LogOut</a>
+                                <button className="text-white btn btn-danger" href="/" onClick={handleLogout}>LogOut</button>
                             </li>
                         </ul>
                     </div>

@@ -1,0 +1,12 @@
+.table-responsive {
+    margin: 20px;
+  }
+  
+  .table th, .table td {
+    text-align: center;
+  }
+  
+  .table button {
+    margin: 0;
+  }
+  

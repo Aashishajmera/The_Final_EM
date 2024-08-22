@@ -1,12 +1,13 @@
 import './App.css';
 import { Route, Routes } from "react-router-dom";
-import SignUp from './components/loginComponent/Signup';
-import SignIn from './components/loginComponent/Signin';
-import HomePage from './components/homeComponent/HomePageComponent';
-import HeaderComponent from './components/headerComponent/HeaderComponent';
-import FooterComponent from './components/footerComponent/FooterComponent';
+import SignUp from './components/LoginComponent/Signup';
+import SignIn from './components/LoginComponent/Signin';
+import HomePage from './components/HomeComponent/HomePageComponent';
+import HeaderComponent from './components/HeaderComponent/HeaderComponent';
+import FooterComponent from './components/FooterComponent/FooterComponent';
 import AllEventList from './components/EventListComponent/AllEventList';
 import OurEventComponent from './components/OurEventComponent/OurEvent';
+import CreateNewEvent from './components/NewEventComponent/NewEventCreate';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
       <Route path='/footer' element={<FooterComponent/>}/>
       <Route path='/eventList' element={<AllEventList/>}/>
       <Route path='/ourEvent' element={<OurEventComponent/>}/>
+      <Route path='/newEvent' element={<CreateNewEvent/>}/>
     </Routes>
     </>
   );
