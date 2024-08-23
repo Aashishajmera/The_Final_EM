@@ -1,17 +1,22 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Swal from "sweetalert2";
 import FooterComponent from "../FooterComponent/FooterComponent";
 import HeaderComponent from "../HeaderComponent/HeaderComponent";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
-export default function CreateNewEvent() {
+export default function EditEvent() {
+    // for getting the event which is sent by the previous component for update
+    const location = useLocation();
+    const event = location.state.event;
+
+
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [date, setDate] = useState("");
     const [time24, setTime24] = useState(''); // 24-hour time for input field
-    const [time12, setTime12] = useState(''); // 12-hour time for display
-    const [location, setLocation] = useState("");
+    const [time12, setTime12] = useState(''); // 12-hour time for display  const [time, setTime] = useState("");
+    const [locationInput, setLocationInput] = useState("");
     const [capacity, setCapacity] = useState("");
 
     const [titleErr, setTitleErr] = useState("");
@@ -21,8 +26,25 @@ export default function CreateNewEvent() {
     const [locationErr, setLocationErr] = useState("");
     const [capacityErr, setCapacityErr] = useState("");
 
-
     const navigate = useNavigate();
+
+    // Use useEffect to populate the state with the event data
+    useEffect(() => {
+        const formatDate = (isDate) => {
+            // Create a new Date object from the ISO string
+            const date = new Date(isDate);
+            // Extract the date part in YYYY-MM-DD format
+            return date.toISOString().split('T')[0];
+        }
+        setTitle(event.title);
+        setDescription(event.description);
+        // Convert and set the date
+        setDate(formatDate(event.date));
+        setTime24(convertTo24HourFormat(event.time));
+        setTime12(event.time)
+        setLocationInput(event.location);
+        setCapacity(event.capacity);
+    }, [event]);
 
     // Validation functions
     const validateTitle = (value) => {
@@ -57,12 +79,9 @@ export default function CreateNewEvent() {
     };
 
     const validateTime = (value) => {
-        // Check if the value is empty
         if (!value) {
             setTimeErr("Time is required");
-        }
-        // Check if the time is in the correct 12-hour format with uppercase AM/PM
-        else if (!/^([01]?[0-9]|2[0-3]):([0-5][0-9])\s?(AM|PM)$/.test(value)) {
+        } else if (!/^([01]?[0-9]|2[0-3]):([0-5][0-9])\s?(AM|PM)$/.test(value)) {
             setTimeErr("Time must be in hh:mm AM/PM format with AM/PM in uppercase");
         } else {
             setTimeErr("");
@@ -105,7 +124,7 @@ export default function CreateNewEvent() {
         setDate(value);
         validateDate(value);
     };
-    //    =============================================================
+    // ========================================================
 
     // Function to convert 24-hour time to 12-hour time with AM/PM
     const convertTo12HourFormat = (time24) => {
@@ -115,6 +134,14 @@ export default function CreateNewEvent() {
         return `${String(adjustedHours).padStart(2, '0')}:${String(minutes).padStart(2, '0')} ${period}`;
     };
 
+    // Function to convert 12-hour time back to 24-hour time
+    const convertTo24HourFormat = (time12) => {
+        const [time, period] = time12.split(' ');
+        let [hours, minutes] = time.split(':').map(Number);
+        if (period === 'PM' && hours < 12) hours += 12;
+        if (period === 'AM' && hours === 12) hours = 0;
+        return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
+    };
 
     const handleTimeChange = (e) => {
         const value24Hour = e.target.value; // Time in 24-hour format (e.g., "13:00")
@@ -123,13 +150,13 @@ export default function CreateNewEvent() {
         setTime12(value12Hour); // Update 12-hour formatted time state for display
         validateTime(time12)
     };
+    // ========================================================
 
-    //    =============================================================
 
 
     const handleLocationChange = (e) => {
         const value = e.target.value;
-        setLocation(value);
+        setLocationInput(value);
         validateLocation(value);
     };
 
@@ -139,85 +166,77 @@ export default function CreateNewEvent() {
         validateCapacity(value);
     };
 
-    let userId = sessionStorage.getItem("user");
-    userId = JSON.parse(userId)._id;
-
     // Handle form submission
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         // Run all validations before submission
         validateTitle(title);
-        validateTime(time12)
         validateDescription(description);
         validateDate(date);
-        validateLocation(location);
+        validateTime(time12);
+        validateLocation(locationInput);
         validateCapacity(capacity);
 
-        // Check if there are any errors
-        if (
-            titleErr ||
-            descriptionErr ||
-            dateErr ||
-            timeErr ||
-            locationErr ||
-            capacityErr
-        ) {
-            // Show SweetAlert with error message
-            await Swal.fire({
-                icon: "error",
-                title: "Validation Error",
-                text: "Please fix the errors in the form before submitting.",
-            });
-            return;
-        }
-
-        try {
-            const response = await axios.post(
-                "http://localhost:3000/event/addevent",
-                {
-                    title: title,
-                    description: description,
-                    date: date,
-                    time: time12,
-                    location: location,
-                    capacity: capacity,
-                    userId: userId,
-                }
-            );
-
-            // Show SweetAlert success message
-            if (response.status === 201) {
+        // Wait until state updates are completed
+        setTimeout(async () => {
+            // Check if there are any errors
+            if (
+                titleErr ||
+                descriptionErr ||
+                dateErr ||
+                timeErr ||
+                locationErr ||
+                capacityErr
+            ) {
                 await Swal.fire({
-                    icon: "success",
-                    title: "Success!",
-                    text: "Event created successfully.",
-                })
-                navigate('/ourEvent');
+                    icon: "error",
+                    title: "Validation Error",
+                    text: "Please fix the errors in the form before submitting.",
+                });
+                return;
             }
 
-            // Reset form fields
-            setTitle("");
-            setDescription("");
-            setDate("");
-            setLocation("");
-            setCapacity("");
-        } catch (error) {
-            console.log(error);
-            // Show SweetAlert error message
-            await Swal.fire({
-                icon: "error",
-                title: "Submission Error",
-                text: "There was an error creating the event. Please try again.",
-            });
-        }
+            try {
+                const response = await axios.put(
+                    "http://localhost:3000/event/updateEvent", // Updated URL with http://
+                    {
+                        title,
+                        description,
+                        date,
+                        time: time12,
+                        location: locationInput,
+                        capacity,
+                        id: event._id,
+                    }
+                );
+
+                // Show SweetAlert success message
+                if (response.status === 200) {
+                    await Swal.fire({
+                        icon: "success",
+                        title: "Success!",
+                        text: response.data.msg,
+                    });
+
+                    navigate('/ourEvent'); // Navigate back to events list or wherever appropriate
+                }
+            } catch (error) {
+                console.error(error);
+                await Swal.fire({
+                    icon: "error",
+                    title: "Submission Error",
+                    text: "There was an error updating the event. Please try again.",
+                });
+            }
+        }, 0); // Timeout with 0 delay ensures the state is updated before the check
     };
 
     return (
         <>
             <HeaderComponent />
             <div className="container border p-3 mt-4 mb-4 border-secondary rounded">
-                <h2 className="text-center mb-4">Create Event</h2>
+                <h2 className="text-center mb-4">Update Event Details</h2>
                 <form onSubmit={handleSubmit}>
                     <div className="row mb-3">
                         <div className="col-md-6 mb-3">
@@ -260,6 +279,7 @@ export default function CreateNewEvent() {
                                     id="date"
                                     placeholder="Event Date"
                                     min={new Date().toISOString().split("T")[0]} // Prevent past dates
+                                    required
                                 />
                                 <small className="text-danger fs-7">{dateErr}</small>
                                 <label htmlFor="date">Date</label>
@@ -285,7 +305,7 @@ export default function CreateNewEvent() {
                             <div className="form-floating">
                                 <input
                                     type="text"
-                                    value={location}
+                                    value={locationInput}
                                     onChange={handleLocationChange}
                                     className="form-control"
                                     id="location"
@@ -312,7 +332,7 @@ export default function CreateNewEvent() {
                     </div>
                     <div>
                         <button type="submit" className="btn btn-primary">
-                            Create Event
+                            Update Event
                         </button>
                     </div>
                 </form>

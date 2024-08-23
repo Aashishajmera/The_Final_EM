@@ -1,143 +1,152 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import {  ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import axios from 'axios'; // Import axios
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import axios from "axios";
+import Swal from "sweetalert2";
 import "./Signup.css";
-import Swal from 'sweetalert2'
+
 export default function SignIn() {
-    // State for form fields and errors
-    const [formData, setFormData] = useState({
-        email: "",
-        password: ""
-    });
+  // State for form fields
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-    // Hook for navigation
-    const navigate = useNavigate();
+  // State for error messages
+  const [emailErr, setEmailErr] = useState("");
+  const [passwordErr, setPasswordErr] = useState("");
 
-    const [errors, setErrors] = useState({});
+  // Hook for navigation
+  const navigate = useNavigate();
 
-    // Handle input changes
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData((prevData) => ({
-            ...prevData,
-            [name]: value
-        }));
+  // Validation functions
+  const validateEmail = (value) => {
+    if (!value) {
+      setEmailErr("Email is required");
+    } else if (!/\S+@\S+\.\S+/.test(value)) {
+      setEmailErr("Email is invalid");
+    } else {
+      setEmailErr("");
+    }
+  };
 
-        // Clear errors when user types
-        setErrors((prevErrors) => ({
-            ...prevErrors,
-            [name]: validateField(name, value)
-        }));
-    };
+  const validatePassword = (value) => {
+    if (!value) {
+      setPasswordErr("Password is required");
+    } else if (value.length < 6) {
+      setPasswordErr("Password must be at least 6 characters");
+    } else {
+      setPasswordErr("");
+    }
+  };
 
-    // Validate individual field
-    const validateField = (name, value) => {
-        switch (name) {
-            case 'email':
-                return value.trim()
-                    ? /\S+@\S+\.\S+/.test(value) ? "" : "Email is invalid"
-                    : "Email is required";
-            case 'password':
-                return value.trim()
-                    ? value.length >= 6 ? "" : "Password must be at least 6 characters"
-                    : "Password is required";
-            default:
-                return "";
-        }
-    };
+  // Handlers for input changes
+  const handleEmailChange = (e) => {
+    const value = e.target.value;
+    setEmail(value);
+    validateEmail(value);
+  };
 
-    // Handle form submission
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        const validationErrors = {
-            email: validateField('email', formData.email),
-            password: validateField('password', formData.password)
-        };
+  const handlePasswordChange = (e) => {
+    const value = e.target.value;
+    setPassword(value);
+    validatePassword(value);
+  };
 
-        setErrors(validationErrors);
+  // Handle form submission
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-        if (Object.values(validationErrors).every(error => !error)) {
-            // Form is valid, handle form submission here (e.g., API call)
-            try {
-                const response = await axios.post('http://localhost:3000/user/usersignin', formData);
-                
-                // STORE THE DATA INTO SESSION STORAGE
-                const user = response.data.user;
-                sessionStorage.setItem('user', JSON.stringify(user));
+    // Run validations before submission
+    validateEmail(email);
+    validatePassword(password);
 
+    // Check if there are any errors
+    if (emailErr || passwordErr) {
+      Swal.fire({
+        icon: "error",
+        title: "Validation Error",
+        text: "Please fix the errors in the form before submitting.",
+      });
+      return;
+    }
 
-                // Notify the user of successful sign-in
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Success!',
-                    text: response.data.msg || "Sign-In successful!",
-                    confirmButtonText: 'OK'
-                }).then(() => {
-                    // Navigate to the home page after success
-                    navigate('/homePage');
-                });
-            } catch (error) {
-                console.error("Error during sign-in:", error);
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: error.response?.data?.msg || "Sign-In failed. Please try again.",
-                    confirmButtonText: 'OK'
-                });
-            }
-        } else {
-            Swal.fire({
-                icon: 'warning',
-                title: 'Warning',
-                text: "Please fill the form correctly.",
-                confirmButtonText: 'OK'
-            });
-        }
-    };
-    return (
-        <>
-            <main className="main-container d-flex align-items-center justify-content-center">
-                <div className="input-container p-4 m-3">
-                    <div className="text-center mb-3">
-                        <h3 className="fw-bolder">SignIn</h3>
-                    </div>
-                    <form onSubmit={handleSubmit}>
-                        <div className="form-floating mb-3">
-                            <input
-                                type="email"
-                                className="form-control"
-                                id="floatingInput"
-                                name="email"
-                                placeholder="name@example.com"
-                                value={formData.email}
-                                onChange={handleChange}
-                            />
-                            <label htmlFor="floatingInput">Email address</label>
-                            {errors.email && <div className="text-danger">{errors.email}</div>}
-                        </div>
-                        <div className="form-floating mb-3">
-                            <input
-                                type="password"
-                                className="form-control"
-                                id="floatingPassword"
-                                name="password"
-                                placeholder="Password"
-                                value={formData.password}
-                                onChange={handleChange}
-                            />
-                            <label htmlFor="floatingPassword">Password</label>
-                            {errors.password && <div className="text-danger">{errors.password}</div>}
-                        </div>
-                        <div className="mt-3">
-                            <button type="submit" className="btn btn-outline-success me-2">SignIn</button>
-                            <Link to="/">Create a new account</Link>
-                        </div>
-                    </form>
-                </div>
-            </main>
-            <ToastContainer />
-        </>
-    );
+    try {
+      const response = await axios.post(
+        "http://localhost:3000/user/usersignin",
+        { email, password }
+      );
+
+      // Store user data in session storage
+      const user = response.data.user;
+      sessionStorage.setItem("user", JSON.stringify(user));
+
+      if (response.status === 200) {
+        // Notify the user of successful sign-in
+        Swal.fire({
+          icon: "success",
+          title: "Success!",
+          text: response.data.msg || "Sign-In successful!",
+          confirmButtonText: "OK",
+        }).then(() => {
+          // Navigate to the home page after success
+          navigate("/homePage");
+        });
+      }
+    } catch (error) {
+      console.error("Error during sign-in:", error);
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: error.response?.data?.msg || "Sign-In failed. Please try again.",
+        confirmButtonText: "OK",
+      });
+    }
+  };
+
+  return (
+    <>
+      <main className="main-container d-flex align-items-center justify-content-center">
+        <div className="input-container p-4 m-3">
+          <div className="text-center mb-3">
+            <h3 className="fw-bolder">SignIn</h3>
+          </div>
+          <form onSubmit={handleSubmit}>
+            <div className="form-floating mb-3">
+              <input
+                type="email"
+                className="form-control"
+                id="floatingInput"
+                name="email"
+                placeholder="name@example.com"
+                value={email}
+                onChange={handleEmailChange}
+              />
+              <label htmlFor="floatingInput">Email address</label>
+              <small className="text-danger fs-7">{emailErr}</small>
+            </div>
+            <div className="form-floating mb-3">
+              <input
+                type="password"
+                className="form-control"
+                id="floatingPassword"
+                name="password"
+                placeholder="Password"
+                value={password}
+                onChange={handlePasswordChange}
+              />
+              <label htmlFor="floatingPassword">Password</label>
+              <small className="text-danger fs-7">{passwordErr}</small>
+            </div>
+            <div className="mt-3">
+              <button type="submit" className="btn btn-outline-success me-2">
+                SignIn
+              </button>
+              <Link to="/">Create a new account</Link>
+            </div>
+          </form>
+        </div>
+      </main>
+      <ToastContainer />
+    </>
+  );
 }

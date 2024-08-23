@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 export default function AllEventList() {
     // State to store events data
@@ -7,6 +8,8 @@ export default function AllEventList() {
     // State to handle loading and error
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+
+    const navigate = useNavigate();
 
     // Fetch data when component mounts
     useEffect(() => {
@@ -71,7 +74,7 @@ export default function AllEventList() {
                             <td>{event.time || 'N/A'}</td> 
                             <td>{event.location || 'N/A'}</td>
                             <td>{event.capacity || 'N/A'}</td>
-                            <td><button className='btn btn-outline-primary'>Apply</button></td>
+                            <td><button className='btn btn-outline-primary' onClick={()=>{navigate('/registrationForm')}} >Apply</button></td>
                         </tr>
                     ))}
                 </tbody>

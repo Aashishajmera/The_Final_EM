@@ -47,9 +47,6 @@ export const readOurEvent = async (req, res, next) => {
     // Find events where userId matches
     const allEvents = await EventModel.find({ userId });
 
-    // Log the retrieved events
-    console.log("Retrieved events:", allEvents);
-
     if (allEvents.length === 0) {
       return res
         .status(204)
