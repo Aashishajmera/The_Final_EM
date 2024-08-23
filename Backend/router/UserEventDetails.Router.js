@@ -16,7 +16,8 @@ const registrationValidation = [
     check('email').isEmail().withMessage('Valid email is required'),
     check('contactNumber').notEmpty().withMessage('Contact number is required'),
     check('address').notEmpty().withMessage('Address is required'),
-    check('eventId').isMongoId().withMessage('Valid Event ID is required')
+    check('eventId').isMongoId().withMessage('Valid Event ID is required'),
+    check('userId').isMongoId().withMessage('Valid Event ID is required')
 ];
 
 userEventDetailsRouter.post(process.env.USER_REGISTRATION, registrationValidation, RegistrationForEvent);

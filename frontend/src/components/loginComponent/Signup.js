@@ -3,11 +3,13 @@ import Swal from "sweetalert2";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./Signup.css";
+import '@fortawesome/fontawesome-free/css/all.min.css'; // Import Font Awesome
 
 export default function SignUp() {
   const [userName, setUserName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [passwordVisible, setPasswordVisible] = useState(false); // State for password visibility
 
   const [userNameErr, setUserNameErr] = useState("");
   const [emailErr, setEmailErr] = useState("");
@@ -155,9 +157,9 @@ export default function SignUp() {
             <small className="text-danger fs-7">{emailErr}</small>
             <label htmlFor="floatingInput">Email address</label>
           </div>
-          <div className="form-floating mb-3">
+          <div className="form-floating mb-3 position-relative">
             <input
-              type="password"
+              type={passwordVisible ? 'text' : 'password'} // Toggle password visibility
               className="form-control"
               id="floatingPassword"
               name="password"
@@ -167,6 +169,18 @@ export default function SignUp() {
             />
             <small className="text-danger fs-7">{passwordErr}</small>
             <label htmlFor="floatingPassword">Password</label>
+            <i
+              className={`fas fa-eye${passwordVisible ? '-slash' : ''}`} // Font Awesome icon
+              onClick={() => setPasswordVisible(!passwordVisible)}
+              style={{
+                position: 'absolute',
+                right: '10px',
+                top: '50%',
+                transform: 'translateY(-50%)',
+                cursor: 'pointer',
+                zIndex: 1,
+              }}
+            ></i>
           </div>
           <div className="mt-3">
             <button type="submit" className="btn btn-outline-success me-2">

@@ -36,6 +36,11 @@ const userEventSchema = new mongoose.Schema({
         ref: 'events', // Reference to the Event model
         required: true,
     },
+    userId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'users', // Reference to the Event model
+        required: true,
+    },
 });
 
 // Create the UserEvent model

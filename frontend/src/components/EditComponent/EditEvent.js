@@ -331,7 +331,9 @@ export default function EditEvent() {
                         </div>
                     </div>
                     <div>
-                        <button type="submit" className="btn btn-primary">
+                        <button style={{
+                            backgroundColor: 'rgb(0, 156, 167)', color: 'white'
+                        }}   type="submit" className="btn">
                             Update Event
                         </button>
                     </div>

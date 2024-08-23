@@ -74,7 +74,7 @@ export default function AllEventList() {
                             <td>{event.time || 'N/A'}</td> 
                             <td>{event.location || 'N/A'}</td>
                             <td>{event.capacity || 'N/A'}</td>
-                            <td><button className='btn btn-outline-primary' onClick={()=>{navigate('/registrationForm')}} >Apply</button></td>
+                            <td><button className='btn btn-outline-primary' onClick={()=>{navigate('/registrationForm',{state: {event}})}} >Apply</button></td>
                         </tr>
                     ))}
                 </tbody>

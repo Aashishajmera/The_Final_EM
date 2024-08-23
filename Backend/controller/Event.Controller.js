@@ -113,7 +113,7 @@ export const deleteEvent = async (req, res, next) => {
     for (const user of userListInEvent) {
       // Prepare email content for event deletion
       const mailOptions = {
-        from: "thegreatayurveda@gmail.com",
+        from: process.env.SEND_EMAIL,
         to: user.email,
         subject: `Cancellation Notice: ${eventDetails.title} Event`,
         text: `
@@ -215,7 +215,7 @@ export const updateEvent = async (req, res, next) => {
 
       // Prepare email content for event update
       const mailOptions = {
-        from: "thegreatayurveda@gmail.com",
+        from: process.env.SEND_EMAIL,
         to: user.email,
         subject: `Update: Changes to the ${title} Event`,
         text: `
