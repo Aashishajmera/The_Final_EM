@@ -1,5 +1,5 @@
 import { FeedbackModel } from "../model/FeedbackModel.js"; // Adjust the path as needed
-
+import { EventModel } from "../model/Event.Model.js";
 
 // create new feedback
 export const createFeedback = async (req, res) => {
@@ -61,3 +61,24 @@ export const seeFeedbackList = async (req, res, next) => {
     return res.status(500).json({ msg: 'Internal server error' }); // 500 status code for server error
   }
 };
+
+// particular user feedback see
+export const seeUserFeedbackList = async (req, res, next) =>{
+  try {
+    const { userId } = req.body;
+
+    // Use find to fetch all feedbacks for a particular eventId
+    const feedbackList = await FeedbackModel.find({ userId }).populate('eventId');
+
+    if (!feedbackList || feedbackList.length === 0) {
+      // Uncomment the return statement below
+      return res.status(204).json({ msg: 'No feedback found' }); // 204 is used to signify no content
+    }
+    console.log('outside');
+    return res.status(200).json({ msg: 'Feedback list', feedbackList }); // 200 for a successful response
+
+  } catch (error) {
+    console.log('Internal server error', error);
+    return res.status(500).json({ msg: 'Internal server error' }); // 500 status code for server error
+  }
+}

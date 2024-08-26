@@ -2,11 +2,9 @@
     background-color: rgb(0, 156, 167);
 }
 
-/* for remove the border */
-.humber-icon{
-    color: white !important;
-
-}
+.fas.fa-bars {
+    color: white;
+  }
 
 .humber-btn{
     border: none;

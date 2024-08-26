@@ -1,9 +1,16 @@
-import React from 'react';
 import { Link } from 'react-router-dom'; // Import Link
 import Swal from 'sweetalert2'; // Import SweetAlert2
 import "./HeaderComponent.css";
 
 export default function HeaderComponent() {
+
+// for showing the username in the nav bar
+    const user = sessionStorage.getItem('user');
+    const userjsObj = JSON.parse(user);
+    const userName = userjsObj.userName;
+    console.log(userName);
+
+
     const handleLogout = (e) => {
         e.preventDefault(); // Prevent the default behavior of the link
 
@@ -38,14 +45,18 @@ export default function HeaderComponent() {
         <>
             <nav className="navbar navbar-expand-lg navbar-light">
                 <div className="container-fluid">
-                    <Link className="navbar-brand fw-bold text-white" to="/">Logo</Link>
+                    <Link className="navbar-brand fw-bold text-white">Wellcome {userName} !!</Link>
                     <button className="humber-btn navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                        <span className="humber-icon navbar-toggler-icon border-0"></span>
+                        <span><i className="fas fa-bars"></i>
+                        </span>
                     </button>
                     <div className="collapse navbar-collapse" id="navbarNav">
                         <ul className="navbar-nav d-flex justify-content-end w-100">
-                        <li className="nav-item">
+                            <li className="nav-item">
                                 <Link className="nav-link text-white" to="/homePage">Home</Link>
+                            </li>
+                            <li className="nav-item">
+                                <Link className="nav-link text-white" to="/seeUserFeedback">OurFeedback</Link>
                             </li>
                             <li className="nav-item">
                                 <Link className="nav-link text-white" to="/newEvent">CreateEvent</Link>

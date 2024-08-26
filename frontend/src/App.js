@@ -15,6 +15,7 @@ const CreateNewEvent = lazy(() => import("./components/NewEventComponent/NewEven
 const EditEvent = lazy(() => import("./components/EditComponent/EditEvent"));
 const Registration = lazy(() => import("./components/RegistrationComponent/Registration"));
 const SeeFeedback = lazy(()=> import('./components/ShowFeedbackCom/SeeFeedback'))
+const ShowFeedbackUser = lazy(()=> import('./components/ShowFeedbackUserCom/ShowFeedbackUser'))
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
           <Route path="/registrationForm" element={<Registration />} />
           <Route path="/feedback" element={<Feedback/>}/>
           <Route path="/seeFeedback" element={<SeeFeedback/>}/>
+          <Route path="/seeUserFeedback" element={<ShowFeedbackUser/>} />
         </Routes>
       </Suspense>
     </>

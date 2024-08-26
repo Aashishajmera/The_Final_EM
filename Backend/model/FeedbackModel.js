@@ -4,12 +4,12 @@ import mongoose from "mongoose";
 const feedbackSchema = new mongoose.Schema({
     userId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "user", // Refers to the User model
+        ref: "users", // Refers to the User model
         required: true
     },
     eventId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "event", // Refers to the Event model
+        ref: "events", // Refers to the Event model
         required: true
     },
     review: {
