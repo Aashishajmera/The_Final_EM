@@ -31,9 +31,8 @@ export default function OurEventComponent() {
   //   for see feedback
   const seeFeedback = async (_id) => {
     try {
-      console.log("i am feedback id", _id);
       const response = await axios.post(
-        "http://localhost:3000/event/checkEventComplete",
+        process.env.REACT_APP_SEE_FEEDBACK,
         { _id }
       );
 

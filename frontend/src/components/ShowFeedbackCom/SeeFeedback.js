@@ -20,7 +20,7 @@ export default function SeeFeedback() {
     const feedbackList = async () => {
       try {
         const response = await axios.post(
-          "http://localhost:3000/feedback/seeFeedback",
+          process.env.REACT_APP_SEE_FEED,
           { eventId }
         );
 

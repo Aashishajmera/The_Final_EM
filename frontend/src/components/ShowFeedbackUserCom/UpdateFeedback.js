@@ -4,24 +4,18 @@ import { useLocation, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 
 // Lazy load the components
-const HeaderComponent = lazy(() =>
-  import("../HeaderComponent/HeaderComponent")
-);
-const FooterComponent = lazy(() =>
-  import("../FooterComponent/FooterComponent")
-);
+const HeaderComponent = lazy(() => import("../HeaderComponent/HeaderComponent"));
+const FooterComponent = lazy(() => import("../FooterComponent/FooterComponent"));
 
 // Fallback UI for Suspense
 const fallbackUI = <div>Loading...</div>;
 
-export default function Feedback() {
-  const [feedback, setFeedback] = useState("");
-  const [feedbackErr, setFeedbackErr] = useState("");
+export default function UpdateFeedback() {
   const navigate = useNavigate();
+  const item = useLocation().state.item;
 
-  // fot getting the event id
-
-  const eventId = useLocation().state._id;
+  const [feedback, setFeedback] = useState(item.review || ""); // Initialize with existing review
+  const [feedbackErr, setFeedbackErr] = useState("");
 
   // Handle form submission
   const handleSubmit = async (e) => {
@@ -56,38 +50,23 @@ export default function Feedback() {
       },
     });
 
-    // get the user id in session storage
-    const userObj = sessionStorage.getItem("user");
-    const userId = JSON.parse(userObj)._id;
-
-    console.log("i am event id", eventId);
-    console.log("i am user id", userId);
-
-    // get current date and time
-    const date = new Date();
-    // Get ISO string format of the current date and time
-    const isoString = date.toISOString(); // Example: 2024-08-24T12:33:45.123Z
-    // Append '11' to the end of the string
-    const dateTime = isoString + "11";
-
     try {
-      const response = await axios.post(process.env.REACT_APP_CREATE_FEEDBACK, {
-        userId,
-        eventId,
-        dateTime,
-        review: feedback,
-      }); // Simulate network delay
+      const response = await axios.patch(process.env.REACT_APP_UPDATE_FEEDBACK, {
+        _id: item._id,
+        review: feedback, // Use state variable here
+      });
+
       if (response.status === 201) {
         Swal.close(); // Close the loading message
 
         // Show success message
         await Swal.fire({
           icon: "success",
-          title: "Feedback Submitted",
-          text: "Thank you for your feedback!",
+          title: "Feedback Updated",
+          text: "Thank you for updating the feedback!",
         });
 
-        navigate('/homePage')
+        navigate("/seeUserFeedback");
 
         // Clear feedback input field after submission (optional)
         setFeedback("");
@@ -110,16 +89,16 @@ export default function Feedback() {
         <HeaderComponent />
       </Suspense>
       <div className="container border p-3 mt-4 mb-4 border-secondary rounded">
-        <h2 className="text-center mb-4">Feedback Form</h2>
+        <h2 className="text-center mb-4">Update Feedback Form</h2>
         <form onSubmit={handleSubmit}>
           <div className="row mb-3">
             <div className="col-md-12">
               <div className="form-floating">
                 <textarea
-                  className="form-control "
+                  className="form-control"
                   id="feedback"
                   placeholder="Leave your feedback here"
-                  value={feedback}
+                  value={feedback} // Use the state variable here
                   onChange={(e) => setFeedback(e.target.value)}
                   rows="8"
                 />
@@ -136,14 +115,16 @@ export default function Feedback() {
                 fontSize: "16px",
               }}
               type="submit"
-              className="btn">
-              Submit
+              className="btn"
+            >
+              Update
             </button>
             <button
               type="button"
               onClick={() => navigate(-1)}
               className="btn btn-outline-secondary ms-2 ps-4 pe-4"
-              style={{ fontSize: "16px" }}>
+              style={{ fontSize: "16px" }}
+            >
               Back
             </button>
           </div>

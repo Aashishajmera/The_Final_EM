@@ -291,6 +291,7 @@ export const checkEventComplete = async (req, res, next) => {
     // Compare the dates
     if (currentDateString > eventDateString) {
       // If the current date is greater than the event date, the event is complete
+      console.log('hello i am date check');
       return res.status(200).json({ msg: "Event is complete", eventDetails });
     } else if (currentDateString === eventDateString) {
       // If dates are the same, compare the times

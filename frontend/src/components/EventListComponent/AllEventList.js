@@ -14,7 +14,7 @@ const FooterComponent = lazy(() =>
 export default function AllEventList() {
   const alleventURL = process.env.REACT_APP_ALLEVENT_URL;
   const checkUserRegistrationURL =
-    "http://localhost:3000/userRegistrationapi/chekUserRagistration";
+    process.env.REACT_APP_CHECK_USER_REGISTRATION;
 
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -29,29 +29,60 @@ export default function AllEventList() {
 
   //   for check the event event is complete or not
 
-// Example function to handle feedback and show alert
-const feedbackFun = async (_id) => {
-  try {
-    const response = await axios.post('http://localhost:3000/event/checkEventComplete', { _id });
-    
-    if (response.status === 201) {
-      // Show SweetAlert message for status code 201
-      Swal.fire({
-        icon: 'info',
-        title: 'Event Not Complete',
-        text: 'The event is not complete yet. You are not able to give feedback at this moment.',
-        confirmButtonText: 'OK',
-        confirmButtonColor: '#3085d6'
-      });
-    } else {
-        navigate('/feedback', {state: {_id}})
-    }
-  } catch (error) {
-    console.log("Error occurred while checking event completion:", error);
-  }
-};
+  // Example function to handle feedback and show alert
+  const feedbackFun = async (_id) => {
+    try {
+      const response = await axios.post(
+        process.env.REACT_APP_CHECK_EVENT_COMPELETE,
+        { _id }
+      );
 
-  
+      if (response.status === 201) {
+        // Show SweetAlert message for status code 201
+        Swal.fire({
+          icon: "info",
+          title: "Event Not Complete",
+          text: "The event is not complete yet. You are not able to give feedback at this moment.",
+          confirmButtonText: "OK",
+          confirmButtonColor: "#3085d6",
+        });
+      } else {
+        navigate("/feedback", { state: { _id } });
+      }
+    } catch (error) {
+      console.log("Error occurred while checking event completion:", error);
+    }
+  };
+
+  // user Registration function
+  const userRegistrationFun = async (event) => {
+    console.log('i am call');
+    //   for see feedback
+      try {
+        const response = await axios.post(
+          process.env.REACT_APP_CHECK_EVENT_COMPELETE,
+          { _id : event._id}
+        );
+
+        console.log(response);
+
+        if (response.status === 200 || response.status === 203) {
+          console.log('i am event compl');
+          // Show SweetAlert message for status code 201
+          Swal.fire({
+            icon: "info",
+            title: "Event is Completed",
+            text: "The event is complete yet. You are not able to register at this moment.",
+            confirmButtonText: "OK",
+            confirmButtonColor: "#3085d6",
+          });
+        } else {
+          navigate("/registrationForm", { state: { event } });
+        }
+      } catch (error) {
+        console.log("Error occurred while checking event completion:", error);
+      }
+  };
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -162,7 +193,7 @@ const feedbackFun = async (_id) => {
                       }}
                       className="btn"
                       onClick={() => {
-                        navigate("/registrationForm", { state: { event } });
+                        userRegistrationFun(event);
                       }}>
                       Apply
                     </button>

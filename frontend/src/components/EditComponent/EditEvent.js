@@ -187,7 +187,7 @@ export default function EditEvent() {
 
     try {
       const response = await axios.put(
-        "http://localhost:3000/event/updateEvent",
+        process.env.REACT_APP_OUREVENT,
         {
           title,
           description,
