@@ -1,7 +1,9 @@
+/* give a some margin in table */
 .table-responsive {
     margin: 20px;
   }
   
+  /* for center the table data */
   .table th, .table td {
     text-align: center;
   }

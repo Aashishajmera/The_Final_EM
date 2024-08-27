@@ -11,10 +11,13 @@ const HeaderComponent = lazy(() =>
 );
 
 export default function EditEvent() {
+
+  // for getting the data and navigate the page 
   const location = useLocation();
   const navigate = useNavigate();
   const event = location.state.event;
 
+  // manage all the input field data
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [date, setDate] = useState("");
@@ -23,6 +26,7 @@ export default function EditEvent() {
   const [locationInput, setLocationInput] = useState("");
   const [capacity, setCapacity] = useState("");
 
+  // manage input field error
   const [titleErr, setTitleErr] = useState("");
   const [descriptionErr, setDescriptionErr] = useState("");
   const [dateErr, setDateErr] = useState("");
@@ -32,6 +36,7 @@ export default function EditEvent() {
 
   // Initialize form fields with event data on mount
   useEffect(() => {
+    // getting the only date
     const formatDate = (isDate) => new Date(isDate).toISOString().split("T")[0];
     setTitle(event.title || "");
     setDescription(event.description || "");
@@ -122,7 +127,7 @@ export default function EditEvent() {
     validateCapacity(value);
   };
 
-  // Time format conversion functions
+  // Time format conversion functions in 12 hour
   const convertTo12HourFormat = (time24) => {
     const [hours, minutes] = time24.split(":").map(Number);
     const period = hours >= 12 ? "PM" : "AM";
@@ -132,6 +137,7 @@ export default function EditEvent() {
     ).padStart(2, "0")} ${period}`;
   };
 
+  // in 24 hour
   const convertTo24HourFormat = (time12) => {
     const [time, period] = time12.split(" ");
     let [hours, minutes] = time.split(":").map(Number);

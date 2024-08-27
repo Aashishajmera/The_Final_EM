@@ -1,9 +1,7 @@
 import { FeedbackModel } from "../model/FeedbackModel.js"; // Adjust the path as needed
-import { EventModel } from "../model/Event.Model.js";
 
 // create new feedback
 export const createFeedback = async (req, res) => {
-  console.log("i am feedback call");
   try {
     // Destructure fields from request body
     const { userId, eventId, review, dateTime } = req.body;
@@ -55,7 +53,6 @@ export const seeFeedbackList = async (req, res, next) => {
       // Uncomment the return statement below
       return res.status(204).json({ msg: "No feedback found" }); // 204 is used to signify no content
     }
-    console.log("outside");
     return res.status(200).json({ msg: "Feedback list", feedbackList }); // 200 for a successful response
   } catch (error) {
     console.log("Internal server error", error);
@@ -77,7 +74,6 @@ export const seeUserFeedbackList = async (req, res, next) => {
       // Uncomment the return statement below
       return res.status(204).json({ msg: "No feedback found" }); // 204 is used to signify no content
     }
-    console.log("outside");
     return res.status(200).json({ msg: "Feedback list", feedbackList }); // 200 for a successful response
   } catch (error) {
     console.log("Internal server error", error);
@@ -89,7 +85,6 @@ export const seeUserFeedbackList = async (req, res, next) => {
 export const deleteParticularFeedback = async (req, res, next) => {
   try {
     const { _id } = req.body;
-    console.log("i am call", _id);
     const feedbackDelete = await FeedbackModel.deleteOne({ _id });
     if (feedbackDelete.deletedCount > 0) {
       return res.status(200).json({

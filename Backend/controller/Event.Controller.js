@@ -262,12 +262,9 @@ Event Management Team`,
 export const checkEventComplete = async (req, res, next) => {
   try {
     const { _id } = req.body; // Extract event ID from the request body
-    console.log("I am call", _id);
     const eventDetails = await UserEventDetailsModel.find({
       eventId: _id,
     }).populate("eventId"); // Fetch event details from the database
-
-    console.log(eventDetails);
 
     if (!eventDetails || eventDetails.length === 0) {
       return res.status(203).json({ msg: "No user found for this event" });
@@ -286,12 +283,9 @@ export const checkEventComplete = async (req, res, next) => {
     // Format the event date to a string for comparison
     const eventDateString = eventDateObj.toISOString().split("T")[0]; // Get YYYY-MM-DD format
 
-    console.log('currentdata', currentDateString, currentTimeString, 'database', eventDateString, eventTime);
-
     // Compare the dates
     if (currentDateString > eventDateString) {
       // If the current date is greater than the event date, the event is complete
-      console.log('hello i am date check');
       return res.status(200).json({ msg: "Event is complete", eventDetails });
     } else if (currentDateString === eventDateString) {
       // If dates are the same, compare the times

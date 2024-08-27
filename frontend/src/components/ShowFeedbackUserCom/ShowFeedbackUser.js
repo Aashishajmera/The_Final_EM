@@ -12,13 +12,18 @@ const FooterComponent = lazy(() =>
 );
 
 export default function SeeFeedback() {
+
+  // state for managing the feedback data
   const [feedback, setFeedbackList] = useState([]);
   const navigate = useNavigate();
 
+  // get the user login data
   const user = sessionStorage.getItem("user");
   const jsObjectUser = JSON.parse(user);
   const userId = jsObjectUser._id;
 
+
+  // for user feedback list for user
   useEffect(() => {
     const feedbackList = async () => {
       try {
@@ -50,7 +55,6 @@ export default function SeeFeedback() {
 
   // for deleting the feedback
   const deleteFeedback = async (item) => {
-    console.log(item);
     const result = await Swal.fire({
       title: "Are you sure?",
       text: "Do you really want to delete this feedback? This action cannot be undone.",

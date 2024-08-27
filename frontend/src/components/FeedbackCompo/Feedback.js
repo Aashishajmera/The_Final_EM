@@ -60,8 +60,6 @@ export default function Feedback() {
     const userObj = sessionStorage.getItem("user");
     const userId = JSON.parse(userObj)._id;
 
-    console.log("i am event id", eventId);
-    console.log("i am user id", userId);
 
     // get current date and time
     const date = new Date();

@@ -12,10 +12,13 @@ const FooterComponent = lazy(() =>
 );
 
 export default function SeeFeedback() {
+
+  // for manage the feedback data
   const [feedback, setFeedbackList] = useState([]);
   const navigate = useNavigate();
   const eventId = useLocation().state;
 
+  // for see the feedback only create event user
   useEffect(() => {
     const feedbackList = async () => {
       try {

@@ -8,6 +8,8 @@ const FooterComponent = lazy(() => import("../FooterComponent/FooterComponent"))
 const HeaderComponent = lazy(() => import("../HeaderComponent/HeaderComponent"));
 
 export default function Registration() {
+
+  // url link for registration
   const registrationURL = process.env.REACT_APP_REGISTRATION_URL;
 
   // State for form fields

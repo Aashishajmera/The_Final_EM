@@ -22,19 +22,19 @@ export default function SignUp() {
 
   const navigate = useNavigate();
 
-// Validation functions
-const validateUserName = (value) => {
-  // This pattern allows alphabetic characters and a single space between words
-  const alphabeticPattern = /^[A-Za-z]+(?: [A-Za-z]+)*$/;
+  // Validation functions
+  const validateUserName = (value) => {
+    // This pattern allows alphabetic characters and a single space between words
+    const alphabeticPattern = /^[A-Za-z]+(?: [A-Za-z]+)*$/;
 
-  if (!value.trim()) {
-    setUserNameErr("Username is required");
-  } else if (!alphabeticPattern.test(value)) {
-    setUserNameErr("Username must contain only alphabetic characters");
-  } else {
-    setUserNameErr("");
-  }
-};
+    if (!value.trim()) {
+      setUserNameErr("Username is required");
+    } else if (!alphabeticPattern.test(value)) {
+      setUserNameErr("Username must contain only alphabetic characters");
+    } else {
+      setUserNameErr("");
+    }
+  };
 
 
   const validateEmail = (value) => {

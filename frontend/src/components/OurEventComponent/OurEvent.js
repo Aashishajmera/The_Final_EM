@@ -138,6 +138,7 @@ export default function OurEventComponent() {
     });
   };
 
+  // for getting the user data in session storage
   useEffect(() => {
     const value = sessionStorage.getItem("user");
 
@@ -180,6 +181,8 @@ export default function OurEventComponent() {
     fetchEvents();
   }, []);
 
+
+  // getting the only date not time
   const formatDate = (isoDate) => {
     if (!isoDate) return "N/A";
     const date = new Date(isoDate);

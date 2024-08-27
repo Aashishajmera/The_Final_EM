@@ -6,6 +6,7 @@
     color: white;
   }
 
+  /* for remove the border on humber icon */
 .humber-btn{
     border: none;
     border-radius: 10%;

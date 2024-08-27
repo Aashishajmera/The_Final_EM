@@ -12,17 +12,24 @@ const FooterComponent = lazy(() =>
 );
 
 export default function AllEventList() {
+
+
+  // url for call the backend api 
   const alleventURL = process.env.REACT_APP_ALLEVENT_URL;
   const checkUserRegistrationURL =
     process.env.REACT_APP_CHECK_USER_REGISTRATION;
 
+    // state for manage the event data
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [registeredEvents, setRegisteredEvents] = useState({});
 
+  // for navigate the other pages
   const navigate = useNavigate();
 
+
+  // get the use data in session storage
   const user = sessionStorage.getItem("user");
   const jsObjectUser = JSON.parse(user);
   const userId = jsObjectUser._id;
@@ -56,15 +63,12 @@ export default function AllEventList() {
 
   // user Registration function
   const userRegistrationFun = async (event) => {
-    console.log('i am call');
     //   for see feedback
       try {
         const response = await axios.post(
           process.env.REACT_APP_CHECK_EVENT_COMPELETE,
           { _id : event._id}
         );
-
-        console.log(response);
 
         if (response.status === 200 || response.status === 203) {
           console.log('i am event compl');
@@ -84,6 +88,7 @@ export default function AllEventList() {
       }
   };
 
+  // for getting the all event
   useEffect(() => {
     const fetchEvents = async () => {
       try {
@@ -130,7 +135,7 @@ export default function AllEventList() {
     };
 
     fetchEvents();
-  }, [alleventURL, userId]);
+  }, [alleventURL, userId,checkUserRegistrationURL]);
 
   if (loading) {
     return <h2>Loading...</h2>;
@@ -140,6 +145,7 @@ export default function AllEventList() {
     return <h2>Error: {error}</h2>;
   }
 
+  // getting the only date not time
   const formatDate = (isoDate) => {
     if (!isoDate) return "N/A";
     const date = new Date(isoDate);

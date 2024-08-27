@@ -108,6 +108,7 @@ export default function CreateNewEvent() {
         validateDate(value);
     };
 
+    // convert the time in 12 hours formate
     const convertTo12HourFormat = (time24) => {
         const [hours, minutes] = time24.split(':').map(Number);
         const period = hours >= 12 ? 'PM' : 'AM';

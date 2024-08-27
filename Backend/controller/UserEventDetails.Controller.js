@@ -72,6 +72,7 @@ Event Managment Team`,
     }
 };
 
+// CHECK USER IS REGISTER OR NOT
 export const checkUserRegistration = async (req, res) => {
     try {
       const { userId, eventId } = req.body;
