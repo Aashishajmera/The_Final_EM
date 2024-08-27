@@ -8,7 +8,6 @@ export default function HeaderComponent() {
     const user = sessionStorage.getItem('user');
     const userjsObj = JSON.parse(user);
     const userName = userjsObj.userName;
-    console.log(userName);
 
 
     // when user click logout button

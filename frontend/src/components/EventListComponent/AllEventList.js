@@ -70,8 +70,7 @@ export default function AllEventList() {
           { _id : event._id}
         );
 
-        if (response.status === 200 || response.status === 203) {
-          console.log('i am event compl');
+        if (response.status === 200) {
           // Show SweetAlert message for status code 201
           Swal.fire({
             icon: "info",
@@ -108,6 +107,7 @@ export default function AllEventList() {
       }
     };
 
+    // check registration for button change
     const checkRegistrations = async (events) => {
       const registrationStatuses = {};
 

@@ -62,12 +62,12 @@ Event Managment Team`,
 
         // Respond with success
         return res.status(201).json({
-            msg: "User registered successfully and email sent.",
+            msg: "User registered successfully and mail send.",
             userEventDetails: populatedUserEventDetails,
         });
 
     } catch (error) {
-        console.error('Error during user registration or sending email', error);
+        console.error('Error during user registration or sending mail', error);
         return res.status(500).json({ msg: "Internal server error..." });
     }
 };

@@ -27,10 +27,6 @@ const userEventSchema = new mongoose.Schema({
         type: Boolean,
         default: false,
     },
-    eventComplete: {
-        type: Boolean,
-        default: false,
-    },
     eventId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'events', // Reference to the Event model

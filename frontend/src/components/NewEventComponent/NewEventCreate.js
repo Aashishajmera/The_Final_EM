@@ -35,8 +35,8 @@ export default function CreateNewEvent() {
             setTitleErr("Title is required");
         } else if (!/^[a-zA-Z\s]+$/.test(value)) {
             setTitleErr("Title can contain only alphabet characters and spaces");
-        } else if (value.length < 5 || value.length > 50) {
-            setTitleErr("Title must be between 5 and 50 characters long");
+        } else if (value.length < 3 || value.length > 50) {
+            setTitleErr("Title must be between 3 and 50 characters long");
         } else {
             setTitleErr("");
         }
@@ -82,8 +82,8 @@ export default function CreateNewEvent() {
     const validateCapacity = (value) => {
         if (!value) {
             setCapacityErr("Capacity is required");
-        } else if (isNaN(value) || value <= 0) {
-            setCapacityErr("Capacity must be a positive number");
+        } else if (isNaN(value) || (value <= 0 || value >= 5000) ) {
+            setCapacityErr("Capacity must be a positive number maximum 5000");
         } else {
             setCapacityErr("");
         }

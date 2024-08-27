@@ -25,6 +25,10 @@ const eventSchema = new mongoose.Schema({
         trim: true,
         required: true,
     },
+    eventComplete: {
+        type: Boolean,
+        default: false,
+    },
     capacity: {
         type: Number,
         required: true,

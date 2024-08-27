@@ -51,8 +51,8 @@ export default function SignUp() {
   const validatePassword = (value) => {
     if (!value.trim()) {
       setPasswordErr("Password is required");
-    } else if (value.length < 6) {
-      setPasswordErr("Password must be at least 6 characters");
+    } else if (value.length < 8) {
+      setPasswordErr("Password must be at least 8 characters");
     } else {
       setPasswordErr("");
     }
@@ -105,6 +105,8 @@ export default function SignUp() {
         }
       );
 
+      console.log(response);
+
       if (response.status === 201) {
         await Swal.fire({
           icon: "success",
@@ -122,6 +124,7 @@ export default function SignUp() {
       // Navigate to the sign-in page after success
       navigate("/signIn");
     } catch (error) {
+      console.log(error);
       await Swal.fire({
         icon: "error",
         title: "Submission Error",

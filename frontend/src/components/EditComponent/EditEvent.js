@@ -47,6 +47,8 @@ export default function EditEvent() {
     setCapacity(event.capacity || "");
   }, [event]);
 
+  console.log(time24);
+
   // Validation functions
   const validateTitle = (value) => {
     if (!value) setTitleErr("Title is required");
@@ -288,6 +290,7 @@ export default function EditEvent() {
                   className="form-control"
                   id="time"
                   placeholder="Event Time (hh:mm AM/PM)"
+                  required
                 />
                 <small className="text-danger fs-7">{timeErr}</small>
                 <label htmlFor="time">Time</label>

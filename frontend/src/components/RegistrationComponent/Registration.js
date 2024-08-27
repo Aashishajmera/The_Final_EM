@@ -34,9 +34,6 @@ export default function Registration() {
   const user = sessionStorage.getItem("user");
   const userId = JSON.parse(user)._id;
 
-  console.log(eventId);
-  console.log(userId);
-
   // Validation functions
 const validateUsername = (value) => {
   if (!value) {
@@ -45,8 +42,8 @@ const validateUsername = (value) => {
   } else if (!/^[a-zA-Z\s]+$/.test(value)) {
     setUsernameErr("Username can contain only alphabet characters and spaces");
     return false;
-  } else if (value.length < 5 || value.length > 50) {
-    setUsernameErr("Username must be between 5-50 characters long");
+  } else if (value.length < 2 || value.length > 50) {
+    setUsernameErr("Username must be between 2-50 characters long");
     return false;
   } else {
     setUsernameErr("");
